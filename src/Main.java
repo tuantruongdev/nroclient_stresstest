@@ -15,12 +15,12 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 public class Main {
-    String serverAddress = "127.0.0.1";
+//    String serverAddress = "127.0.0.1";
+//
+//    int serverPort = 14445;
+    String serverAddress = "103.14.48.178";
 
     int serverPort = 14445;
-//    String serverAddress = "103.170.121.55";
-//
-//    int serverPort = 11223;
     List<Account> accounts = new ArrayList<>();
 
     //        String serverAddress = "ipkyuccz.ngocrongkyuc.com";
@@ -30,7 +30,7 @@ public class Main {
         Main m = new Main();
         //m.loadAccounts();
         //m.loginAllZombies();
-        m.loginZombie("tuantruong", "truongtn1");
+        m.loginZombie("moot", "admin");
     }
 
     void loginAllZombies() throws InterruptedException {
@@ -53,6 +53,7 @@ public class Main {
                 @Override
                 public void onMessage(Session ss, Message msg) {
                     //System.out.println("onMsg");
+                    System.out.println("recv "+msg.getCommand());
                 }
 
                 @Override
@@ -70,12 +71,30 @@ public class Main {
                     System.out.println("disconnect");
                 }
             });
-            session.sendSessionKey();
-            Message msg = new Message(-29);
+
+//            session.sendSessionKey();
+//            session.sendSessionKey();
+            Message msg = new Message(-27);
+            byte []b = new byte[]{9, 71, 46, 27, 30, 7, 30, 27, 89, 2};
+            //byte []b = new byte[]{6, 71, 2, 11, 5, 10, 8}; //genkai
+            msg.writer().writeByte(b[0]);
+            for (int i = 0; i < b.length; i++) {
+                msg.writer().writeByte(b[i]);
+            }
+            msg.writer().flush();
+            session.doSendMessage(msg);
+            session.isRead = true;
+            session.sendKeyComplete = true;
+            session.sender.active();
+
+            //session.sendMessage(msg);
+
+
+            msg = new Message(-29);
             msg.writer().writeByte(0);
             msg.writer().writeUTF(username.toLowerCase());
             msg.writer().writeUTF(pass.toLowerCase());
-            msg.writer().writeUTF("2.2.5".toLowerCase());
+            msg.writer().writeUTF("2.3.1".toLowerCase());
             msg.writer().writeByte(0);
             msg.writer().flush();
             session.sendMessage(msg);
@@ -133,55 +152,50 @@ public class Main {
             msg.writer().flush();
             session.sendMessage(msg);*/
 
-            //open ba hat mit
-            Thread.sleep(1000);
-            msg = new Message(56);
-            msg.writer().writeShort(21);
-            msg.writer().flush();
-            session.sendMessage(msg);
 
-            //select pha le hoa
-            Thread.sleep(1000);
-            msg = new Message(32);
-            msg.writer().writeShort(56);//npc id
-            msg.writer().writeByte(3);//select thu 4
-            msg.writer().flush();
-            session.sendMessage(msg);
-
-//            //select bang ngoc
+//
+//            //open ba hat mit
 //            Thread.sleep(1000);
-//            msg = new Message(32);
-//            msg.writer().writeShort(21);//npc id
-//            msg.writer().writeByte(0);//select o dau tien
+//            msg = new Message(56);
+//            msg.writer().writeShort(21);
 //            msg.writer().flush();
 //            session.sendMessage(msg);
-
-            //select item
-            Thread.sleep(1000);
-            msg = new Message(-81);
-            msg.writer().writeByte(1);//action
-            msg.writer().writeByte(1);//so luong item
-            msg.writer().writeByte(0);//index item, quan kaio
-            msg.writer().flush();
-            session.sendMessage(msg);
-
-
-
-            //cat item index
-            Thread.sleep(1000);
-            msg = new Message(-40);
-            msg.writer().writeByte(1);
-            msg.writer().writeByte(0);
-            msg.writer().flush();
-            session.sendMessage(msg);
-
-            //upgrade item
-            Thread.sleep(1000);
-            msg = new Message(32);
-            msg.writer().writeShort(5);//npc id
-            msg.writer().writeByte(0);//select x100
-            msg.writer().flush();
-            session.sendMessage(msg);
+//
+//            //select pha le hoa
+//            Thread.sleep(1000);
+//            msg = new Message(32);
+//            msg.writer().writeShort(56);//npc id
+//            msg.writer().writeByte(3);//select thu 4
+//            msg.writer().flush();
+//            session.sendMessage(msg);
+//
+//
+//            //select item
+//            Thread.sleep(1000);
+//            msg = new Message(-81);
+//            msg.writer().writeByte(1);//action
+//            msg.writer().writeByte(1);//so luong item
+//            msg.writer().writeByte(0);//index item, quan kaio
+//            msg.writer().flush();
+//            session.sendMessage(msg);
+//
+//
+//
+//            //cat item index
+//            Thread.sleep(1000);
+//            msg = new Message(-40);
+//            msg.writer().writeByte(1);
+//            msg.writer().writeByte(0);
+//            msg.writer().flush();
+//            session.sendMessage(msg);
+//
+//            //upgrade item
+//            Thread.sleep(1000);
+//            msg = new Message(32);
+//            msg.writer().writeShort(5);//npc id
+//            msg.writer().writeByte(0);//select x100
+//            msg.writer().flush();
+//            session.sendMessage(msg);
 
             Util.log("done all");
 

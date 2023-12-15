@@ -1,3 +1,5 @@
+import server.Util;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -22,9 +24,10 @@ public class Session implements ISession {
 
     public int countDie;
 
-    private boolean sendKeyComplete, connected;
+    public boolean sendKeyComplete, connected;
 
-    private static byte[] keys = "GENKAI".getBytes();
+    //private static byte[] keys = "GENKAI".getBytes();
+    private static  byte []keys = new byte[]{9, 71, 46, 27, 30, 7, 30, 27, 89, 2};
     private byte curR, curW;
 
     protected Socket socket;
@@ -409,7 +412,7 @@ public class Session implements ISession {
 //            msg.writer().writeByte(1);//Connext (0 = false; 1 = true)
             doSendMessage(msg);
             isRead = true;
-            sendKeyComplete = true;
+            sendKeyComplete = false;
             sender.active();
         } catch (Exception e) {
            System.out.println(e.toString());
